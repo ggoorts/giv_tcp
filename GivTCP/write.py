@@ -17,6 +17,7 @@ import GivLUT
 from GivLUT import GivLUT, GivQueue
 from givenergy_modbus.model import TimeSlot
 from givenergy_modbus.model.ems import Ems
+from givenergy_modbus.model.inverter_threephase import ThreePhaseInverter
 from givenergy_modbus.client import commands as gecommands     # v2 exposes some writes only as module functions
 from givenergy_modbus.pdu import WriteHoldingRegisterRequest
 import requests
@@ -648,7 +649,11 @@ async def setBatteryCutoff(device,payload,readloop=False):
         if target<4: target=4
         logger.debug ("Setting battery cutoff target to: " + str(target))
         #temp= await sbpr(target,readloop)
-        reqs=device.set_battery_power_reserve(target)
+        if isinstance(device, ThreePhaseInverter):
+            # Battery_Power_Cutoff reads HR1078 on three-phase: write that same reserve.
+            reqs=device.set_battery_reserve_soc(target)
+        else:
+            reqs=device.set_battery_power_reserve(target)
         result= await sendAsyncCommand(reqs,readloop)
         if 'error' in result:
             raise Exception(result['error'])

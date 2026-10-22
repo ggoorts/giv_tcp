@@ -1,0 +1,4 @@
+FROM britkat/giv_tcp-ma@sha256:9fe9b2e2aa32077cd1e8b856ea644c7a18769e6f25a7a7aea968f3f09b40ae14
+RUN python3 -c "import hashlib; from pathlib import Path; assert hashlib.sha256(Path('/app/GivTCP/write.py').read_bytes()).hexdigest() == '20b644ab3e92fef6f01edd60df60ab08ec60a761295577184cc6a81db1ff986c', 'Unexpected base writer source'"
+COPY GivTCP/write.py /app/GivTCP/write.py
+RUN python3 -c "import ast, hashlib; from pathlib import Path; from givenergy_modbus.model.inverter_threephase import ThreePhaseInverter; p=Path('/app/GivTCP/write.py'); assert hashlib.sha256(p.read_bytes()).hexdigest() == '10c2d3657979dd76962bf6f32a3dc11276ce01420a996741697e072ffe464d9d', 'Writer differs from tested candidate'; ast.parse(p.read_text()); assert hasattr(ThreePhaseInverter, 'set_battery_reserve_soc')"

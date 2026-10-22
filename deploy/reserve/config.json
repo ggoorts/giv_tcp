@@ -1,0 +1,25 @@
+{
+  "name": "GivTCP local reserve fix",
+  "description": "Official GivTCP 3.6.8 with the tested three-phase HR1078 reserve writer correction.",
+  "version": "3.6.8-reserve.1",
+  "slug": "givtcp_reserve",
+  "homeassistant_api": true,
+  "hassio_api": true,
+  "init": true,
+  "ingress": true,
+  "services": [
+    "mqtt:want"
+  ],
+  "map": [
+    "config:rw",
+    "ssl"
+  ],
+  "boot": "auto",
+  "url": "https://github.com/britkat1980/giv_tcp",
+  "legacy": true,
+  "arch": [
+    "aarch64"
+  ],
+  "host_network": true,
+  "image": "ghcr.io/ggoorts/givtcp-reserve"
+}
