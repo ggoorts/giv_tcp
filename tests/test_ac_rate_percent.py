@@ -5,6 +5,7 @@ The cached rate is an accepted setting, never evidence of physical battery power
 """
 import pytest
 from GivLUT import GivLUT
+from write import finditem
 
 
 def percent_case(plants, api, entry, kind, requested):
@@ -24,7 +25,7 @@ def test_percent_rate_minimum_and_normal_values(plants, api, entry, kind, regist
     cached = GivLUT.get_regcache()[-1]
     assert cached["Control"]["Battery_" + kind.title() + "_Rate_AC"] == accepted
     assert cached["Control"]["Battery_" + kind.title() + "_Rate"] == int(
-        accepted / 100 * cached["Invertor_Details"]["Invertor_Max_Bat_Rate"]
+        accepted / 100 * finditem(cached, "Invertor_Max_Bat_Rate")
     )
 
 
