@@ -8,6 +8,14 @@ from GivLUT import GivLUT
 from write import finditem
 
 
+@pytest.fixture(autouse=True)
+def restore_settings_class(monkeypatch):
+    import settings
+
+    # Intentionally register the same value: writes reload settings during tests.
+    monkeypatch.setattr(settings, "GiV_Settings", settings.GiV_Settings)
+
+
 def percent_case(plants, api, entry, kind, requested):
     command = "set" + kind.title() + "RateAC"
     target = "/" + command if entry == "rest" else command

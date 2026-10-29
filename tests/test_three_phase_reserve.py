@@ -7,6 +7,14 @@ import pytest
 from givenergy_modbus.model.register import HR
 
 
+@pytest.fixture(autouse=True)
+def restore_settings_class(monkeypatch):
+    import settings
+
+    # Intentionally register the same value: writes reload settings during tests.
+    monkeypatch.setattr(settings, "GiV_Settings", settings.GiV_Settings)
+
+
 @pytest.mark.parametrize("entry", ["direct", "rest", "mqtt"])
 @pytest.mark.parametrize("target", [6, 17, 100])
 def test_three_phase_cutoff_writes_runtime_reserve(plants, api, entry, target):
