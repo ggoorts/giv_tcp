@@ -1,7 +1,7 @@
 {
   "name": "GivTCP local reserve fix",
-  "description": "Official GivTCP 3.6.8 with the three-phase HR1078 reserve correction and 0% AC percentage requests mapped to the supported 1% minimum.",
-  "version": "3.6.8-reserve.2",
+  "description": "Official GivTCP3.6.9 with the existing HR1078 reserve and zero-to-one AC percentage compatibility fixes; Lite mode remains off until configured.",
+  "version": "3.6.9-reserve.1",
   "slug": "givtcp_reserve",
   "homeassistant_api": true,
   "hassio_api": true,
@@ -11,7 +11,11 @@
     "mqtt:want"
   ],
   "map": [
-    "config:rw",
+    {
+      "type": "homeassistant_config",
+      "read_only": false,
+      "path": "/config"
+    },
     "ssl"
   ],
   "boot": "auto",
@@ -21,5 +25,6 @@
     "aarch64"
   ],
   "host_network": true,
-  "image": "ghcr.io/ggoorts/givtcp-reserve"
+  "image": "ghcr.io/ggoorts/givtcp-reserve",
+  "ingress_entry": "readme.html"
 }

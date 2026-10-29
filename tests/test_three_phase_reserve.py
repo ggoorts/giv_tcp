@@ -1,6 +1,6 @@
 """Reserve-control regression using GivTCP's official capture-backed mock plant.
 
-Run inside the GivTCP 3.6.8 source tree, after applying the candidate patch.
+Run inside the GivTCP released source tree, after applying the candidate patch.
 No real inverter is contacted.
 """
 import pytest

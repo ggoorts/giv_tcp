@@ -1,9 +1,13 @@
 # Local GivTCP compatibility candidate
 
-The image is based on pinned official GivTCP3.6.8 and overlays only write.py. The Dockerfile checks both the normalized official writer checksum and the exact candidate checksum.
+Version3.6.9-reserve.1 uses the pinned official3.6.9 image and replaces only GivTCP/write.py. The image checks the official source checksum before replacement and the exact patched checksum afterwards.
 
-Candidate3.6.8-reserve.2 retains the three-phase HR1078 runtime-reserve correction and adds the existing AC minimum handling to setChargeRateAC and setDischargeRateAC:0 maps to1%, valid1–100% stay unchanged, and invalid bounds remain rejected. Accepted percentage and computed-watt cache updates use the same minimum. Predbat bindings and maximum-rate configuration are outside this change.
+The existing two fixes are retained: three-phase Battery Power Cutoff writes HR1078, and AC percentage requests of0 are mapped to the supported1% minimum. Valid1–100% requests and failure handling retain the existing paths.1% is not a physical0W stop.
 
-The AC register cannot express a true0W stop.1% is only the lowest supported rate; actual hold and recovery require separate physical observations. No additional Home Assistant automation is part of this candidate.
+Official Lite mode, security defaults, dependency pins and recovery behavior are unchanged. Lite mode remains off by default. Enabling it reduces active stack/module reads and changes derived SOC kWh; verify Predbat's inverter SOC% binding and live operation before accepting it. Percentage bindings,11kW limits and6% reserve floor remain installation settings.
 
-The branch workflow runs capture-backed MQTT/REST/direct percentage regressions and the existing reserve tests before building the arm64 image. Rollback uses the retained3.6.8-reserve.1 tag; settings are not migrated by this overlay.
+CI runs captured-inverter regressions for direct, REST and MQTT controls and released Lite behavior. It then builds an arm64 image and runs those regressions inside that exact image before publishing it. The upstream Linux/Windows full-suite coverage workflow also runs. Mocks and CI do not establish physical hold or EV recovery.
+
+This is a review candidate. Installation and Lite enablement are separate decisions. Keep only one GivTCP app active. The add-on uses the official homeassistant_config mapping at/config and retains ingress-only8099 defaults. Do not enable LAN Access merely for diagnostics.
+
+Previous image3.6.8-reserve.2 is retained for rollback; review new3.6.9 settings compatibility before reverting. No Home Assistant automation or control mapping is added by this overlay.
